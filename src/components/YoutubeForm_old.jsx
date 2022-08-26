@@ -58,12 +58,9 @@ function YoutubeForm(props) {
             type="text"
             id="name"
             name="name"
-            /*
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.name}
-            */
-           {...formik.getFieldProps('name')}
           />
           {formik.touched.name && formik.errors.name ? (
             <div className="error">{formik.errors.name}</div>
@@ -74,12 +71,9 @@ function YoutubeForm(props) {
               type="text"
               id="email"
               name="email"
-              /*
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
-              */
-              {...formik.getFieldProps('email')}
             />
             {formik.touched.email && formik.errors.email ? (
               <div className="error">{formik.errors.email}</div>
@@ -91,12 +85,9 @@ function YoutubeForm(props) {
               type="text"
               id="channel"
               name="channel"
-              /*
               onChange={formik.handleChange}
               onBlur={formik.handleBlur} //onBlur is stored in formik's touched object
               value={formik.values.channel}
-              */
-              {...formik.getFieldProps('channel')}
             />
             {formik.touched.channel && formik.errors.channel ? (
               <div className="error">{formik.errors.channel}</div>
