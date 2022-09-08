@@ -1,5 +1,5 @@
 import React from "react";
-import {  Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from 'yup';
 import TextError from "./TextError";
 
@@ -10,15 +10,16 @@ function YoutubeForm(props) {
     channel: "",
     comments: "",
     address: "",
-    social:{
-      facebook:'',
-      twitter:''
+    social: {
+      facebook: '',
+      twitter: ''
     },
-    phoneNumbers: ['', '']
+    phoneNumbers: ['', ''],
+    phNumbers: ['']
   };
 
   const onSubmit = (values) => {
-     console.log("Form values: " + JSON.stringify(values));
+    console.log("Form values: " + JSON.stringify(values));
   };
 
   const validate = (values) => {
@@ -47,15 +48,15 @@ function YoutubeForm(props) {
       .required('Required'),
     channel: Yup.string().required('Required')
   })
-/*
-  const formik = useFormik({
-    initialValues,
-    onSubmit,
-    //validate
-    validationSchema
-  });
-*/
- 
+  /*
+    const formik = useFormik({
+      initialValues,
+      onSubmit,
+      //validate
+      validationSchema
+    });
+  */
+
   return (
     <Formik
       initialValues={initialValues}
@@ -76,7 +77,7 @@ function YoutubeForm(props) {
             */
             placeholder='Youtube channel name'
           />
-          <ErrorMessage name='name' component={TextError}/>
+          <ErrorMessage name='name' component={TextError} />
 
           <div className="form-control">
             <label htmlFor="email">Email</label>
@@ -84,11 +85,11 @@ function YoutubeForm(props) {
               type="text"
               id="email"
               name="email"
-              /*
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-              */
+            /*
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            */
             />
             <ErrorMessage name='email'>
               {
@@ -102,13 +103,13 @@ function YoutubeForm(props) {
               type="text"
               id="channel"
               name="channel"
-              /*
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur} //onBlur is stored in formik's touched object
-              value={formik.values.channel}
-              */
+            /*
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur} //onBlur is stored in formik's touched object
+            value={formik.values.channel}
+            */
             />
-            <ErrorMessage name='channel'  component={TextError}/>
+            <ErrorMessage name='channel' component={TextError} />
           </div>
           <div className="form-control">
             <label htmlFor="comments">Comments</label>
@@ -119,12 +120,12 @@ function YoutubeForm(props) {
             <label htmlFor='address'>Address</label>
             <Field name='address' >
               {
-                (props) =>{
-                  const {field, form, meta} =props
-                  console.log('Render props :'+ JSON.stringify( props));
+                (props) => {
+                  const { field, form, meta } = props
+                  console.log('Render props :' + JSON.stringify(props));
                   return (
                     <div>
-                      <input type='text' id='address' {...field}/>
+                      <input type='text' id='address' {...field} />
                       {meta.touched && meta.error ? <div>{meta.error}</div> : null}
                     </div>
                   )
@@ -134,26 +135,50 @@ function YoutubeForm(props) {
           </div>
 
           <div className="form-control">
-              <label htmlFor="facebook">Facebool Profile</label>
-              <Field type='text' id='facebook' name='social.facebook' />
+            <label htmlFor="facebook">Facebool Profile</label>
+            <Field type='text' id='facebook' name='social.facebook' />
           </div>
           <div className="form-control">
-              <label htmlFor="twitter">Twitter Profile</label>
-              <Field type='text' id='twittter' name='social.twittter' />
+            <label htmlFor="twitter">Twitter Profile</label>
+            <Field type='text' id='twittter' name='social.twittter' />
           </div>
-          
+
           <div className="form-control">
-              <label htmlFor="primaryPh">Primary phone number</label>
-              <Field type="text" id="primaryPh" name='phoneNumbers[0]' />
+            <label htmlFor="primaryPh">Primary phone number</label>
+            <Field type="text" id="primaryPh" name='phoneNumbers[0]' />
           </div>
           <div className="form-control">
-              <label htmlFor="secondaryPh">Secondary phone number</label>
-              <Field type="text" id="secondaryPh" name='phoneNumbers[1]' />
+            <label htmlFor="secondaryPh">Secondary phone number</label>
+            <Field type="text" id="secondaryPh" name='phoneNumbers[1]' />
           </div>
-          
-          <button type="submit" value="Submit">
-            Submit
-          </button>
+
+          <div className="form-control">
+            <label>List of Phone Numbers</label>
+            <FieldArray name='phNumbers'>
+              {
+                (fieldArrayProps) => {
+                  console.log('fieldArrayProps: ' + fieldArrayProps);
+                  const { push, remove, form } = fieldArrayProps;
+                  const { values } = form;
+                  const { phNumbers } = values;
+                  return (<div>{
+                    phNumbers.map((phNumber, index) => (
+                      <div key={index}>
+                        <Field name={`phNumbers[${index}]`} />
+                        {index > 0 && <button type="button" onClick={() => remove(index)}> - </button>}
+
+                        <button type="button" onClick={() => push('')}> + </button>
+
+                      </div>
+                    ))
+                  }</div>
+                  )
+                }
+              }
+            </FieldArray>
+          </div>
+
+          <button type="submit" value="Submit">Submit</button>
         </div>
       </Form>
     </Formik>
