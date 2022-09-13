@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray, FastField } from "formik";
 import * as Yup from 'yup';
 import TextError from "./TextError";
 
@@ -62,6 +62,8 @@ function YoutubeForm(props) {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      validateOnChange={false} //this will instruct the formik to not run validation on every change
+      validateOnBlur={false} //onBlur will not run validation
     >
       <Form> {/* we removed onSubmit method as formik's Form component wraps <form> inside it */}
         <div className="form-control">
@@ -118,7 +120,7 @@ function YoutubeForm(props) {
           </div>
           <div className="form-control">
             <label htmlFor='address'>Address</label>
-            <Field name='address' >
+            <FastField name='address' >{/* By using the FastField component, the page will not update the render on every change(as in case of Field every change renders complete page) */}
               {
                 (props) => {
                   const { field, form, meta } = props
@@ -131,7 +133,7 @@ function YoutubeForm(props) {
                   )
                 }
               }
-            </Field>
+            </FastField>
           </div>
 
           <div className="form-control">
@@ -157,10 +159,11 @@ function YoutubeForm(props) {
             <FieldArray name='phNumbers'>
               {
                 (fieldArrayProps) => {
-                  console.log('fieldArrayProps: ' + fieldArrayProps);
+                  //console.log('fieldArrayProps: ' + fieldArrayProps);
                   const { push, remove, form } = fieldArrayProps;
                   const { values } = form;
                   const { phNumbers } = values;
+                  console.log('Form errors: '+ JSON.stringify(form.errors) );
                   return (<div>{
                     phNumbers.map((phNumber, index) => (
                       <div key={index}>
