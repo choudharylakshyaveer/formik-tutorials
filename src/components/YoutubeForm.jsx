@@ -47,7 +47,17 @@ function YoutubeForm(props) {
       .email('Invalid email format')
       .required('Required'),
     channel: Yup.string().required('Required')
+    //comments: Yup.string().required('Required') //commented as we will do field level validation
   })
+
+  const validateComments = value => {
+    let error;
+    if(!value){
+      error='Required'
+    }
+    return error;
+  }
+
   /*
     const formik = useFormik({
       initialValues,
@@ -62,8 +72,8 @@ function YoutubeForm(props) {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      validateOnChange={false} //this will instruct the formik to not run validation on every change
-      validateOnBlur={false} //onBlur will not run validation
+      //validateOnChange={false} //this will instruct the formik to not run validation on every change
+      //validateOnBlur={false} //onBlur will not run validation
     >
       <Form> {/* we removed onSubmit method as formik's Form component wraps <form> inside it */}
         <div className="form-control">
@@ -115,8 +125,8 @@ function YoutubeForm(props) {
           </div>
           <div className="form-control">
             <label htmlFor="comments">Comments</label>
-            <Field as='textarea' id='comments' name='comments' /> {/*instead of 'as' we can also use 'component'*/}
-
+            <Field as='textarea' id='comments' name='comments' validate={validateComments} /> {/*instead of 'as' we can also use 'component'*/}
+            <ErrorMessage name='comments' component={TextError} />
           </div>
           <div className="form-control">
             <label htmlFor='address'>Address</label>
