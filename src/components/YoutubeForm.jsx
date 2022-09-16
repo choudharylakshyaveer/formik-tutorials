@@ -18,8 +18,11 @@ function YoutubeForm(props) {
     phNumbers: ['']
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = (values, onSubmitProps) => {
     console.log("Form values: " + JSON.stringify(values));
+    console.log("Submit props: " + JSON.stringify(onSubmitProps));
+    onSubmitProps.setSubmitting(false); //will enable the submit button after clicking
+
   };
 
   const validate = (values) => {
@@ -203,7 +206,7 @@ function YoutubeForm(props) {
               <button type='button' onClick={() => formik.setTouched({name: true, email: true, channel: true, comments: true})} >Validate All</button>
 
               
-              <button type="submit" value="Submit" disabled={!(formik.isValid)}>Submit</button> {/* can add !(formik.dirty && formik.isValid) to diable submit */}
+              <button type="submit" value="Submit" disabled={!formik.isValid || formik.isSubmitting}>Submit</button> {/* can add !(formik.dirty && formik.isValid) to diable submit */}
             </div>
           </Form>
           )
