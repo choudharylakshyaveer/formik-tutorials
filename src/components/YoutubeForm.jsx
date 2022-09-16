@@ -74,6 +74,7 @@ function YoutubeForm(props) {
       onSubmit={onSubmit}
       //validateOnChange={false} //this will instruct the formik to not run validation on every change
       //validateOnBlur={false} //onBlur will not run validation
+      validateOnMount
     >
       {
         formik => { 
@@ -202,7 +203,7 @@ function YoutubeForm(props) {
               <button type='button' onClick={() => formik.setTouched({name: true, email: true, channel: true, comments: true})} >Validate All</button>
 
               
-              <button type="submit" value="Submit">Submit</button>
+              <button type="submit" value="Submit" disabled={!(formik.isValid)}>Submit</button> {/* can add !(formik.dirty && formik.isValid) to diable submit */}
             </div>
           </Form>
           )
