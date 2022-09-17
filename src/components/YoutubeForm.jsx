@@ -1,11 +1,12 @@
-import React from "react";
+import {React, useState} from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray, FastField } from "formik";
 import * as Yup from 'yup';
 import TextError from "./TextError";
 
 function YoutubeForm(props) {
+  const [formValues, setFormValues] = useState(null);
   const initialValues = {
-    name: "",
+    name: "Lvs",
     email: "",
     channel: "",
     comments: "",
@@ -18,11 +19,26 @@ function YoutubeForm(props) {
     phNumbers: ['']
   };
 
+  const savedValues = {
+    name: "Lakshyaveer Singh",
+    email: "choudharylakshyaveer@gmail.com",
+    channel: "Reactjs Developers",
+    comments: "Welcome to react js world",
+    address: "New Delhi",
+    social: {
+      facebook: '',
+      twitter: ''
+    },
+    phoneNumbers: ['', ''],
+    phNumbers: ['']
+  };
+
+
   const onSubmit = (values, onSubmitProps) => {
     console.log("Form values: " + JSON.stringify(values));
     console.log("Submit props: " + JSON.stringify(onSubmitProps));
     onSubmitProps.setSubmitting(false); //will enable the submit button after clicking
-
+    onSubmitProps.resetForm();
   };
 
   const validate = (values) => {
@@ -72,12 +88,13 @@ function YoutubeForm(props) {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={initialValues || formValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       //validateOnChange={false} //this will instruct the formik to not run validation on every change
       //validateOnBlur={false} //onBlur will not run validation
-      validateOnMount
+      //validateOnMount
+      enableReinitialize //it decides whether form can change initial values after the form has been initialized once
     >
       {
         formik => { 
@@ -198,14 +215,16 @@ function YoutubeForm(props) {
                   }
                 </FieldArray>
               </div>
-              
+              {/*
               <button type='button' onClick={() => formik.validateField('comments')}>Validate Comments</button>
               <button type='button' onClick={() => formik.validateForm()} >Validate All</button>
 
               <button type='button' onClick={() => formik.setFieldTouched('comments')}>Visit Comments</button>
               <button type='button' onClick={() => formik.setTouched({name: true, email: true, channel: true, comments: true})} >Validate All</button>
-
+                */}
               
+              <button type="button" onClick={() => formik.setValues(savedValues)}>Load saved data</button>
+              <button type="button" >Reset</button>
               <button type="submit" value="Submit" disabled={!formik.isValid || formik.isSubmitting}>Submit</button> {/* can add !(formik.dirty && formik.isValid) to diable submit */}
             </div>
           </Form>
